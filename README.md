@@ -1,38 +1,30 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+During our initial interview, we discussed the importance of separating logic from the framework. In this task, I've chosen to use NestJS as the framework (as was also suggested in the task description), while components not tied to the framework are placed in the "lib" directory. The entire application compiles to the "/build" directory. By default, NestJS sets the source directory as "src". However, I would have preferred to name it "/api". This isn't the only approach; I experimented more with NestJS and this concept.
+
+The main task was to write an endpoint for fetching data from a CSV file, keeping in mind the potential for heavy load and the possibility of integrating other data sources in the future. I'm not entirely sure what these other sources might entail, but I based my code on the repository pattern, and it's within this repository that I maintain the logic responsible for fetching data from the CSV file or from the Redis database cache (if the query has been made previously). There were no specific guidelines regarding how long data should be kept in memory, so I didn't set this. I'm unsure of the overall assumptions, but one could consider clearing Redis every 24 hours and transferring other data to a database like MySQL or MongoDB. I also added throttling to limit the number of requests, assuming we will store cached requests somewhere.
+
+In the code, when initializing dependencies, we provide the URL pattern for the CSV file and the Redis host. If no environment variables are provided, the code has hardcoded default values.
+
+I would like to request that you don't treat this as production-ready. In daily work, executing tasks requires additional information that we would determine during a meeting about this feature and then compose specific tasks.
+
+Pipeline:
+
+request -- (validation) --> NestJS ranking controller --> GetTopRatedRepositoriesUseCase --> RankingRepository (internal logic decides the source) --> redis / CSV file
+
+
+I also added docker files... I don't know if you also wanted me to add the k8s configuration?
 
 ## Installation
 
 ```bash
-$ yarn install
+$ yarn
 ```
 
-## Running the app
+## Running the app locally
+
+__If you run it locally make sure to set the localhost for redis in .env__
 
 ```bash
 # development
@@ -43,6 +35,19 @@ $ yarn run start:dev
 
 # production mode
 $ yarn run start:prod
+```
+
+## Running the app on Docker
+```bash
+# run
+$ docker compose up
+# close
+$ docker compose down 
+```
+
+## Example
+```bash
+$ curl http://localhost/ranking/TypeScript/2024-01-01?limit=10
 ```
 
 ## Test
@@ -58,16 +63,8 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-## Support
+## TODO
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- add k8s configs (?)
+- add unit tests
+- add e2e tests
