@@ -60,10 +60,5 @@ $ yarn run test:cov
 
 ## TODO
 
-- implement redis for caching
-- implement logic for caching
-
-- add docker configs
 - add k8s configs (?)
-- use sys variables
 - add unit tests
