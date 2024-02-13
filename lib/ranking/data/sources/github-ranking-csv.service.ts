@@ -43,9 +43,10 @@ export class GitHubRankingCsvService {
               list.push(record);
               recordCount += 1;
 
-              if (limit && recordCount >= limit) {
+              if (limit && list.length === limit) {
+                resolve(list);
                 parser.destroy();
-                break;
+                return;
               }
             }
           }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { inject, injectable } from 'inversify';
-import { RankingRepository } from '../repositories/top-repositories.repository';
+import { RankingRepository } from '../repositories/ranking.repository';
 
 @injectable()
 export class GetTopRatedRepositoriesUseCase {
