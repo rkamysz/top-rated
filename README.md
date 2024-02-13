@@ -62,7 +62,7 @@ $ yarn run test:cov
 
 - implement redis for caching
 - implement logic for caching
-- configure throttling
+
 - add docker configs
 - add k8s configs (?)
 - use sys variables
