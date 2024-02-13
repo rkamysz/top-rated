@@ -1,6 +1,6 @@
 import { Container } from 'inversify';
 import 'reflect-metadata';
-import redis, { RedisClientType } from 'redis';
+import * as redis from 'redis';
 import { GetTopRatedRepositoriesUseCase, RankingRepository } from './domain';
 import {
   GitHubRankingCsvService,
@@ -26,7 +26,7 @@ export const configureRankingDependencies = async (
     service: new GitHubRankingCsvService(options.csv_url_pattern),
   };
 
-  const redisClient: RedisClientType = await redis.createClient({
+  const redisClient: redis.RedisClientType = redis.createClient({
     url: options.redis_host,
   });
   await redisClient.connect();
