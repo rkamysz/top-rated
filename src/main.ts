@@ -5,7 +5,12 @@ import { configureRankingDependencies, container } from 'lib';
 import { ThrottlerExceptionFilter } from './core/filters/throttler-exception.filter';
 
 async function bootstrap() {
-  await configureRankingDependencies(container);
+  await configureRankingDependencies(container, {
+    redis_host: process.env['REDIS_HOST'] || 'redis://localhost:6379',
+    csv_url_pattern:
+      process.env['CSV_URL_PATTERN'] ||
+      'https://raw.githubusercontent.com/EvanLi/Github-Ranking/master/Data/github-ranking-[date].csv',
+  });
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
